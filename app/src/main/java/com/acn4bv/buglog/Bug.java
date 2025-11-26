@@ -1,11 +1,15 @@
 package com.acn4bv.buglog;
 
 public class Bug {
-    private final String nombreJuego;
-    private final String plataforma;
-    private final String tipo;
-    private final String gravedad;
-    private final String descripcion;
+
+    private String nombreJuego;
+    private String plataforma;
+    private String tipo;
+    private String gravedad;
+    private String descripcion;
+
+    public Bug() {
+    }
 
     public Bug(String nombreJuego, String plataforma, String tipo, String gravedad, String descripcion) {
         this.nombreJuego = nombreJuego;
@@ -15,9 +19,45 @@ public class Bug {
         this.descripcion = descripcion;
     }
 
-    public String getNombreJuego() { return nombreJuego; }
-    public String getPlataforma()  { return plataforma; }
-    public String getTipo()        { return tipo; }
-    public String getGravedad()    { return gravedad; }
-    public String getDescripcion() { return descripcion; }
+    // Getters
+    public String getNombreJuego() {
+        return nombreJuego;
+    }
+
+    public String getPlataforma() {
+        return plataforma;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getGravedad() {
+        return gravedad;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    // Setters
+    public void setNombreJuego(String nombreJuego) {
+        this.nombreJuego = nombreJuego;
+    }
+
+    public void setPlataforma(String plataforma) {
+        this.plataforma = plataforma;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setGravedad(String gravedad) {
+        this.gravedad = gravedad;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }

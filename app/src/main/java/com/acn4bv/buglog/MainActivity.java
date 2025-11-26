@@ -87,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
         String tipo       = spTipoBug.getSelectedItem().toString();
 
         Bug nuevo = new Bug(nombre, plataforma, tipo, gravedad, desc);
-        BugRepository.add(nuevo);
+
+        // Guardar en Firestore
+        FirestoreRepository.agregarBug(nuevo);
 
         toast(R.string.bug_reportado);
 

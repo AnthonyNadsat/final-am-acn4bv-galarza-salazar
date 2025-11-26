@@ -1,5 +1,7 @@
 package com.acn4bv.buglog;
 
+import static android.provider.Settings.System.getString;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -15,6 +17,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +28,17 @@ public class ListaBugsActivity extends AppCompatActivity {
     private LinearLayout containerBugs;
     private String filtroActual = "TODOS";
 
+    // Firestore
+    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_bugs);
 
         containerBugs = findViewById(R.id.containerBugs);
+
+        db = FirebaseFirestore.getInstance(); // inicializar Firestore
 
         Button btnVolver = findViewById(R.id.btnVolver);
         btnVolver.setOnClickListener(v -> {
@@ -99,27 +109,46 @@ public class ListaBugsActivity extends AppCompatActivity {
     private void cargarBugs() {
         containerBugs.removeAllViews();
 
-        List<Bug> todos = BugRepository.all();
-        List<Bug> bugsFiltrados = filtrar(todos, filtroActual);
+        db.collection("bugs")
+                .get()
+                .addOnSuccessListener(result -> {
 
-        if (bugsFiltrados.isEmpty()) {
-            TextView empty = new TextView(this);
-            empty.setText(getString(R.string.no_bugs));
-            empty.setTextColor(getColor(R.color.text_secondary));
-            empty.setTextSize(16f);
-            empty.setGravity(Gravity.CENTER);
-            empty.setPadding(0, 48, 0, 48);
-            containerBugs.addView(empty);
-            return;
-        }
+                    List<Bug> todos = new ArrayList<>();
 
-        Resources res = getResources();
-        int marginTop = res.getDimensionPixelSize(R.dimen.margin_medium);
-        int padding   = res.getDimensionPixelSize(R.dimen.padding_medium);
+                    for (QueryDocumentSnapshot doc : result) {
 
-        for (Bug bug : bugsFiltrados) {
-            containerBugs.addView(crearCard(bug, marginTop, padding));
-        }
+                        String nombreJuego = doc.getString("nombreJuego");
+                        String plataforma  = doc.getString("plataforma");
+                        String tipo        = doc.getString("tipo");
+                        String gravedad    = doc.getString("gravedad");
+                        String descripcion = doc.getString("descripcion");
+
+                        Bug bug = new Bug(nombreJuego, plataforma, tipo, gravedad, descripcion);
+                        todos.add(bug);
+                    }
+
+                    List<Bug> bugsFiltrados = filtrar(todos, filtroActual);
+
+                    if (bugsFiltrados.isEmpty()) {
+                        TextView empty = new TextView(this);
+                        empty.setText(getString(R.string.no_bugs));
+                        empty.setTextColor(getColor(R.color.text_secondary));
+                        empty.setTextSize(16f);
+                        empty.setGravity(Gravity.CENTER);
+                        empty.setPadding(0, 48, 0, 48);
+                        containerBugs.addView(empty);
+                        return;
+                    }
+
+                    Resources res = getResources();
+                    int marginTop = res.getDimensionPixelSize(R.dimen.margin_medium);
+                    int padding   = res.getDimensionPixelSize(R.dimen.padding_medium);
+
+                    for (Bug bug : bugsFiltrados) {
+                        containerBugs.addView(crearCard(bug, marginTop, padding));
+                    }
+
+                });
     }
 
     private List<Bug> filtrar(List<Bug> fuente, String filtro) {
@@ -188,7 +217,7 @@ public class ListaBugsActivity extends AppCompatActivity {
         if (texto == null || color == null) return null;
 
         TextView badge = new TextView(this);
-        badge.setPadding(20, 8, 20, 8); // padding en px literal
+        badge.setPadding(20, 8, 20, 8);
         badge.setTextSize(12);
         badge.setTextColor(Color.WHITE);
         badge.setTypeface(null, android.graphics.Typeface.BOLD);

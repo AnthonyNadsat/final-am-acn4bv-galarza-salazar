@@ -2,14 +2,14 @@ package com.acn4bv.buglog;
 
 public class Bug {
 
+    private String id;
     private String nombreJuego;
     private String plataforma;
     private String tipo;
     private String gravedad;
     private String descripcion;
 
-    public Bug() {
-    }
+    public Bug() {}
 
     public Bug(String nombreJuego, String plataforma, String tipo, String gravedad, String descripcion) {
         this.nombreJuego = nombreJuego;
@@ -17,6 +17,14 @@ public class Bug {
         this.tipo = tipo;
         this.gravedad = gravedad;
         this.descripcion = descripcion;
+    }
+
+    // ID
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     // Getters

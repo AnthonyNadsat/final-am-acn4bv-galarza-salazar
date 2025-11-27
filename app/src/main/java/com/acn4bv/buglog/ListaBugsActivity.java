@@ -56,25 +56,25 @@ public class ListaBugsActivity extends AppCompatActivity {
         ViewGroup root = findViewById(android.R.id.content);
         Resources res   = getResources();
 
-        int sizePx = res.getDimensionPixelSize(R.dimen.button_height);   // 48dp
-        int padPx  = res.getDimensionPixelSize(R.dimen.padding_small);   // 8dp
-        int mPx    = res.getDimensionPixelSize(R.dimen.margin_medium);   // 16dp
+        int sizePx = res.getDimensionPixelSize(R.dimen.button_height);
+        int padPx  = res.getDimensionPixelSize(R.dimen.padding_small);
+        int mPx    = res.getDimensionPixelSize(R.dimen.margin_medium);
 
-        // Botón circular
+
         ImageButton fab = new ImageButton(this);
         fab.setLayoutParams(new ViewGroup.LayoutParams(sizePx, sizePx));
 
         GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Color.parseColor("#6B7280")); // gris
+        bg.setColor(Color.parseColor("#6B7280"));
         bg.setCornerRadius(sizePx / 2f);
         fab.setBackground(bg);
         fab.setPadding(padPx, padPx, padPx, padPx);
 
-        // Icono del sistema (similar a filtro)
+
         fab.setImageResource(android.R.drawable.ic_menu_sort_by_size);
         fab.setColorFilter(Color.WHITE);
 
-        // Envolver para posicionar con gravedad bottom|end
+
         LinearLayout wrapper = new LinearLayout(this);
         wrapper.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -95,7 +95,7 @@ public class ListaBugsActivity extends AppCompatActivity {
             menu.getMenu().add("Media");
             menu.getMenu().add("Alta");
             menu.setOnMenuItemClickListener(item -> {
-                filtroActual = item.getTitle().toString().toUpperCase(); // TODOS/BAJA/MEDIA/ALTA
+                filtroActual = item.getTitle().toString().toUpperCase();
                 cargarBugs();
                 return true;
             });
@@ -117,6 +117,7 @@ public class ListaBugsActivity extends AppCompatActivity {
 
                     for (QueryDocumentSnapshot doc : result) {
 
+                        String id          = doc.getId();
                         String nombreJuego = doc.getString("nombreJuego");
                         String plataforma  = doc.getString("plataforma");
                         String tipo        = doc.getString("tipo");
@@ -124,6 +125,8 @@ public class ListaBugsActivity extends AppCompatActivity {
                         String descripcion = doc.getString("descripcion");
 
                         Bug bug = new Bug(nombreJuego, plataforma, tipo, gravedad, descripcion);
+                        bug.setId(id);
+
                         todos.add(bug);
                     }
 
@@ -193,7 +196,43 @@ public class ListaBugsActivity extends AppCompatActivity {
         card.addView(titulo);
         card.addView(cuerpo);
 
+        if (UserRole.isAdmin()) {
+
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+
+            // Botón Editar
+            Button btnEditar = new Button(this);
+            btnEditar.setText("Editar");
+            btnEditar.setAllCaps(false);
+            btnEditar.setTextSize(12f);
+            btnEditar.setOnClickListener(v -> editarBug(bug));
+
+            // Botón Borrar
+            Button btnBorrar = new Button(this);
+            btnBorrar.setText("Borrar");
+            btnBorrar.setAllCaps(false);
+            btnBorrar.setTextSize(12f);
+            btnBorrar.setOnClickListener(v -> borrarBug(bug));
+
+            row.addView(btnEditar);
+            row.addView(btnBorrar);
+
+            card.addView(row);
+        }
+
         return card;
+    }
+
+    private void borrarBug(Bug bug) {
+        db.collection("bugs")
+                .document(bug.getId())
+                .delete()
+                .addOnSuccessListener(unused -> cargarBugs());
+    }
+
+    private void editarBug(Bug bug) {
+
     }
 
     private TextView crearBadgeGravedad(String gravedad) {

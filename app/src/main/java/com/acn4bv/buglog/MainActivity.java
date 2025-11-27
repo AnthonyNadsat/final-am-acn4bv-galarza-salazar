@@ -23,6 +23,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Si no hay usuario logueado  vuelvo al login
+        if (!UserRole.isLoggedIn()) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         etNombreJuego = findViewById(R.id.etNombreJuego);
@@ -62,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ListaBugsActivity.class));
             }
         });
+
+
     }
 
     private void reportar() {

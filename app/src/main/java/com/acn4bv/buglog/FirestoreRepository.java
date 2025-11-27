@@ -13,10 +13,10 @@ public class FirestoreRepository {
         db.collection(COLLECTION_NAME)
                 .add(bug)
                 .addOnSuccessListener(doc -> {
-                    System.out.println("✅ Bug guardado en Firebase: " + doc.getId());
+                    System.out.println(" Bug guardado en Firebase: " + doc.getId());
                 })
                 .addOnFailureListener(e -> {
-                    System.err.println("❌ Error al guardar bug: " + e.getMessage());
+                    System.err.println(" Error al guardar bug: " + e.getMessage());
                 });
     }
 
@@ -38,7 +38,7 @@ public class FirestoreRepository {
                     callback.onCallback(lista);
                 })
                 .addOnFailureListener(e -> {
-                    System.err.println("❌ Error al obtener bugs: " + e.getMessage());
+                    System.err.println(" Error al obtener bugs: " + e.getMessage());
                     callback.onCallback(new ArrayList<>());
                 });
     }

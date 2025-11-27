@@ -9,9 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BugLog">
 
-        <!-- Pantalla 1: Formulario -->
+        <!-- Pantalla 1: Login -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,11 +19,17 @@
             </intent-filter>
         </activity>
 
-        <!-- Pantalla 2: Lista -->
+        <!-- Pantalla 2: Formulario de Reportes -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"/>
+
+        <!-- Pantalla 3: Lista de Reportes -->
         <activity
             android:name=".ListaBugsActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"/>
+
     </application>
 
 </manifest>

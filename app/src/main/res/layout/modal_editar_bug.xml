@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@color/bg_secondary">
+    android:background="@color/card_background">
 
     <TextView
         android:id="@+id/txtTitulo"
@@ -16,7 +16,6 @@
         android:textColor="@color/text_primary"
         android:paddingBottom="12dp" />
 
-    <!-- Nombre del juego -->
     <EditText
         android:id="@+id/etEditNombre"
         android:layout_width="match_parent"
@@ -28,7 +27,6 @@
         android:padding="12dp"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Plataforma -->
     <Spinner
         android:id="@+id/spEditPlataforma"
         android:layout_width="match_parent"
@@ -37,7 +35,6 @@
         android:padding="12dp"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Tipo de bug -->
     <Spinner
         android:id="@+id/spEditTipo"
         android:layout_width="match_parent"
@@ -46,7 +43,6 @@
         android:padding="12dp"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Gravedad -->
     <Spinner
         android:id="@+id/spEditGravedad"
         android:layout_width="match_parent"
@@ -55,7 +51,6 @@
         android:padding="12dp"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Descripción -->
     <EditText
         android:id="@+id/etEditDescripcion"
         android:layout_width="match_parent"
@@ -67,9 +62,20 @@
         android:minLines="3"
         android:gravity="top"
         android:padding="12dp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- NUEVO: URL de portada -->
+    <EditText
+        android:id="@+id/etEditImagenUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="URL de portada (opcional)"
+        android:background="@drawable/input_background"
+        android:textColorHint="@color/text_secondary"
+        android:textColor="@color/text_primary"
+        android:padding="12dp"
         android:layout_marginBottom="16dp"/>
 
-    <!-- Botones -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

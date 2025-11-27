@@ -8,8 +8,9 @@ public class Bug {
     private String tipo;
     private String gravedad;
     private String descripcion;
-
-    public Bug() {}
+    private String imagenUrl;
+    public Bug() {
+    }
 
     public Bug(String nombreJuego, String plataforma, String tipo, String gravedad, String descripcion) {
         this.nombreJuego = nombreJuego;
@@ -19,18 +20,66 @@ public class Bug {
         this.descripcion = descripcion;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Bug(String nombreJuego, String plataforma, String tipo, String gravedad, String descripcion, String imagenUrl) {
+        this(nombreJuego, plataforma, tipo, gravedad, descripcion);
+        this.imagenUrl = imagenUrl;
+    }
 
-    public String getNombreJuego() { return nombreJuego; }
-    public String getPlataforma()  { return plataforma; }
-    public String getTipo()        { return tipo; }
-    public String getGravedad()    { return gravedad; }
-    public String getDescripcion() { return descripcion; }
+    // Getters
+    public String getId() {
+        return id;
+    }
 
-    public void setNombreJuego(String nombreJuego) { this.nombreJuego = nombreJuego; }
-    public void setPlataforma(String plataforma)   { this.plataforma = plataforma; }
-    public void setTipo(String tipo)               { this.tipo = tipo; }
-    public void setGravedad(String gravedad)       { this.gravedad = gravedad; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getNombreJuego() {
+        return nombreJuego;
+    }
+
+    public String getPlataforma() {
+        return plataforma;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getGravedad() {
+        return gravedad;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    // Setters
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setNombreJuego(String nombreJuego) {
+        this.nombreJuego = nombreJuego;
+    }
+
+    public void setPlataforma(String plataforma) {
+        this.plataforma = plataforma;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setGravedad(String gravedad) {
+        this.gravedad = gravedad;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
+    }
 }

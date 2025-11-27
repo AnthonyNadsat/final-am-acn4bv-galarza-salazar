@@ -1,45 +1,26 @@
 package com.acn4bv.buglog;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FirestoreRepository {
 
-    private static final String COLLECTION_NAME = "bugs";
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static void agregarBug(Bug bug) {
-        db.collection(COLLECTION_NAME)
-                .add(bug)
-                .addOnSuccessListener(doc -> {
-                    System.out.println(" Bug guardado en Firebase: " + doc.getId());
-                })
-                .addOnFailureListener(e -> {
-                    System.err.println(" Error al guardar bug: " + e.getMessage());
-                });
-    }
+        Map<String, Object> data = new HashMap<>();
+        data.put("nombreJuego", bug.getNombreJuego());
+        data.put("plataforma",  bug.getPlataforma());
+        data.put("tipo",        bug.getTipo());
+        data.put("gravedad",    bug.getGravedad());
+        data.put("descripcion", bug.getDescripcion());
 
-    public interface FirestoreCallback {
-        void onCallback(ArrayList<Bug> lista);
-    }
+        if (bug.getImagenUrl() != null && !bug.getImagenUrl().trim().isEmpty()) {
+            data.put("imagenUrl", bug.getImagenUrl());
+        }
 
-    public static void obtenerBugs(FirestoreCallback callback) {
-        db.collection(COLLECTION_NAME)
-                .get()
-                .addOnSuccessListener(result -> {
-                    ArrayList<Bug> lista = new ArrayList<>();
-
-                    for (QueryDocumentSnapshot doc : result) {
-                        Bug bug = doc.toObject(Bug.class);
-                        lista.add(bug);
-                    }
-
-                    callback.onCallback(lista);
-                })
-                .addOnFailureListener(e -> {
-                    System.err.println(" Error al obtener bugs: " + e.getMessage());
-                    callback.onCallback(new ArrayList<>());
-                });
+        db.collection("bugs").add(data);
     }
 }

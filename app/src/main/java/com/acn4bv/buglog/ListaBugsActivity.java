@@ -1,26 +1,29 @@
 package com.acn4bv.buglog;
 
+import static android.provider.Settings.System.getString;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.view.View;
-import android.widget.Spinner;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -32,7 +35,6 @@ public class ListaBugsActivity extends AppCompatActivity {
     private LinearLayout containerBugs;
     private String filtroActual = "TODOS";
 
-    // Firestore
     private FirebaseFirestore db;
 
     @Override
@@ -64,7 +66,6 @@ public class ListaBugsActivity extends AppCompatActivity {
         int padPx  = res.getDimensionPixelSize(R.dimen.padding_small);
         int mPx    = res.getDimensionPixelSize(R.dimen.margin_medium);
 
-
         ImageButton fab = new ImageButton(this);
         fab.setLayoutParams(new ViewGroup.LayoutParams(sizePx, sizePx));
 
@@ -74,10 +75,8 @@ public class ListaBugsActivity extends AppCompatActivity {
         fab.setBackground(bg);
         fab.setPadding(padPx, padPx, padPx, padPx);
 
-
         fab.setImageResource(android.R.drawable.ic_menu_sort_by_size);
         fab.setColorFilter(Color.WHITE);
-
 
         LinearLayout wrapper = new LinearLayout(this);
         wrapper.setLayoutParams(new ViewGroup.LayoutParams(
@@ -91,7 +90,6 @@ public class ListaBugsActivity extends AppCompatActivity {
         lp.bottomMargin = mPx;
         fab.setLayoutParams(lp);
 
-        // Menú de opciones
         fab.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(this, fab);
             menu.getMenu().add("Todos");
@@ -127,8 +125,9 @@ public class ListaBugsActivity extends AppCompatActivity {
                         String tipo        = doc.getString("tipo");
                         String gravedad    = doc.getString("gravedad");
                         String descripcion = doc.getString("descripcion");
+                        String imagenUrl   = doc.getString("imagenUrl");
 
-                        Bug bug = new Bug(nombreJuego, plataforma, tipo, gravedad, descripcion);
+                        Bug bug = new Bug(nombreJuego, plataforma, tipo, gravedad, descripcion, imagenUrl);
                         bug.setId(id);
 
                         todos.add(bug);
@@ -157,7 +156,6 @@ public class ListaBugsActivity extends AppCompatActivity {
                 });
     }
 
-
     private List<Bug> filtrar(List<Bug> fuente, String filtro) {
         if ("TODOS".equals(filtro)) return fuente;
 
@@ -180,6 +178,25 @@ public class ListaBugsActivity extends AppCompatActivity {
         lp.topMargin = marginTop;
         card.setLayoutParams(lp);
         card.setPadding(padding, padding, padding, padding);
+
+
+        if (bug.getImagenUrl() != null && !bug.getImagenUrl().trim().isEmpty()) {
+            ImageView cover = new ImageView(this);
+            int heightPx = (int) (160 * getResources().getDisplayMetrics().density);
+            LinearLayout.LayoutParams imgLp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    heightPx
+            );
+            cover.setLayoutParams(imgLp);
+            cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            Glide.with(this)
+                    .load(bug.getImagenUrl())
+                    .placeholder(android.R.color.darker_gray)
+                    .into(cover);
+
+            card.addView(cover);
+        }
 
         TextView badge = crearBadgeGravedad(bug.getGravedad());
         if (badge != null) card.addView(badge);
@@ -205,14 +222,12 @@ public class ListaBugsActivity extends AppCompatActivity {
             LinearLayout row = new LinearLayout(this);
             row.setOrientation(LinearLayout.HORIZONTAL);
 
-            // Boton Editar
             Button btnEditar = new Button(this);
             btnEditar.setText("Editar");
             btnEditar.setAllCaps(false);
             btnEditar.setTextSize(12f);
             btnEditar.setOnClickListener(v -> editarBug(bug));
 
-            // Boton Borrar
             Button btnBorrar = new Button(this);
             btnBorrar.setText("Borrar");
             btnBorrar.setAllCaps(false);
@@ -228,7 +243,6 @@ public class ListaBugsActivity extends AppCompatActivity {
         return card;
     }
 
-
     private void borrarBug(Bug bug) {
         db.collection("bugs")
                 .document(bug.getId())
@@ -237,36 +251,32 @@ public class ListaBugsActivity extends AppCompatActivity {
     }
 
     private void editarBug(Bug bug) {
-
         BottomSheetDialog dialog = new BottomSheetDialog(this);
+
         View view = getLayoutInflater().inflate(R.layout.modal_editar_bug, null);
         dialog.setContentView(view);
 
         EditText etNombre      = view.findViewById(R.id.etEditNombre);
+        Spinner  spPlataforma  = view.findViewById(R.id.spEditPlataforma);
+        Spinner  spTipo        = view.findViewById(R.id.spEditTipo);
+        Spinner  spGravedad    = view.findViewById(R.id.spEditGravedad);
         EditText etDescripcion = view.findViewById(R.id.etEditDescripcion);
+        EditText etImagenUrl   = view.findViewById(R.id.etEditImagenUrl);
 
-        Spinner spPlataforma   = view.findViewById(R.id.spEditPlataforma);
-        Spinner spTipo         = view.findViewById(R.id.spEditTipo);
-        Spinner spGravedad     = view.findViewById(R.id.spEditGravedad);
-
-        Button btnGuardar  = view.findViewById(R.id.btnGuardar);
+        Button btnGuardar = view.findViewById(R.id.btnGuardar);
         Button btnCancelar = view.findViewById(R.id.btnCancelar);
 
         etNombre.setText(bug.getNombreJuego());
         etDescripcion.setText(bug.getDescripcion());
+        etImagenUrl.setText(bug.getImagenUrl());
 
-        ArrayAdapter<CharSequence> adapterPlataforma = ArrayAdapter.createFromResource(
+        ArrayAdapter<CharSequence> adapterPlat = ArrayAdapter.createFromResource(
                 this,
                 R.array.plataformas,
                 R.layout.spinner_item
         );
-        adapterPlataforma.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        spPlataforma.setAdapter(adapterPlataforma);
-
-
-        int posPlataforma = adapterPlataforma.getPosition(bug.getPlataforma());
-        if (posPlataforma >= 0) spPlataforma.setSelection(posPlataforma);
-
+        adapterPlat.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spPlataforma.setAdapter(adapterPlat);
 
         ArrayAdapter<CharSequence> adapterTipo = ArrayAdapter.createFromResource(
                 this,
@@ -276,32 +286,41 @@ public class ListaBugsActivity extends AppCompatActivity {
         adapterTipo.setDropDownViewResource(R.layout.spinner_dropdown_item);
         spTipo.setAdapter(adapterTipo);
 
-        int posTipo = adapterTipo.getPosition(bug.getTipo());
-        if (posTipo >= 0) spTipo.setSelection(posTipo);
-
-
-        ArrayAdapter<CharSequence> adapterGravedad = new ArrayAdapter<>(
+        String[] opcionesGravedad = {
+                getString(R.string.gravedad_baja),
+                getString(R.string.gravedad_media),
+                getString(R.string.gravedad_alta)
+        };
+        ArrayAdapter<String> adapterGrav = new ArrayAdapter<>(
                 this,
                 R.layout.spinner_item,
-                new String[]{"Baja", "Media", "Alta"}
+                opcionesGravedad
         );
-        adapterGravedad.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        spGravedad.setAdapter(adapterGravedad);
+        adapterGrav.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spGravedad.setAdapter(adapterGrav);
 
-        int posGrav = adapterGravedad.getPosition(bug.getGravedad());
-        if (posGrav >= 0) spGravedad.setSelection(posGrav);
+        int indexPlat = adapterPlat.getPosition(bug.getPlataforma());
+        if (indexPlat >= 0) spPlataforma.setSelection(indexPlat);
 
-        // Cancelar
+        int indexTipo = adapterTipo.getPosition(bug.getTipo());
+        if (indexTipo >= 0) spTipo.setSelection(indexTipo);
+
+        int indexGrav = 0;
+        String g = bug.getGravedad() == null ? "" : bug.getGravedad().toUpperCase();
+        if (g.contains("MEDIA")) indexGrav = 1;
+        if (g.contains("ALTA")) indexGrav = 2;
+        spGravedad.setSelection(indexGrav);
+
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
 
-        // Guardar cambios
         btnGuardar.setOnClickListener(v -> {
 
-            String nombre      = etNombre.getText().toString().trim();
+            String nombre = etNombre.getText().toString().trim();
             String plataforma  = spPlataforma.getSelectedItem().toString();
             String tipo        = spTipo.getSelectedItem().toString();
             String gravedad    = spGravedad.getSelectedItem().toString();
             String descripcion = etDescripcion.getText().toString().trim();
+            String imagenUrl   = etImagenUrl.getText().toString().trim();
 
             db.collection("bugs")
                     .document(bug.getId())
@@ -310,7 +329,8 @@ public class ListaBugsActivity extends AppCompatActivity {
                             "plataforma", plataforma,
                             "tipo", tipo,
                             "gravedad", gravedad,
-                            "descripcion", descripcion
+                            "descripcion", descripcion,
+                            "imagenUrl", imagenUrl
                     )
                     .addOnSuccessListener(unused -> {
                         cargarBugs();
@@ -320,8 +340,6 @@ public class ListaBugsActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
-
 
     private TextView crearBadgeGravedad(String gravedad) {
         if (gravedad == null) return null;

@@ -1,7 +1,5 @@
 package com.acn4bv.buglog;
 
-import static android.provider.Settings.System.getString;
-
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -21,8 +19,11 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -70,7 +71,7 @@ public class ListaBugsActivity extends AppCompatActivity {
         fab.setLayoutParams(new ViewGroup.LayoutParams(sizePx, sizePx));
 
         GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Color.parseColor("#6B7280"));
+        bg.setColor(Color.parseColor("#8B5CF6"));
         bg.setCornerRadius(sizePx / 2f);
         fab.setBackground(bg);
         fab.setPadding(padPx, padPx, padPx, padPx);
@@ -148,10 +149,9 @@ public class ListaBugsActivity extends AppCompatActivity {
 
                     Resources res = getResources();
                     int marginTop = res.getDimensionPixelSize(R.dimen.margin_medium);
-                    int padding   = res.getDimensionPixelSize(R.dimen.padding_medium);
 
                     for (Bug bug : bugsFiltrados) {
-                        containerBugs.addView(crearCard(bug, marginTop, padding));
+                        containerBugs.addView(crearCard(bug, marginTop));
                     }
                 });
     }
@@ -168,39 +168,59 @@ public class ListaBugsActivity extends AppCompatActivity {
         return out;
     }
 
-    private LinearLayout crearCard(Bug bug, int marginTop, int padding) {
-        LinearLayout card = new LinearLayout(this);
-        card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackgroundResource(R.drawable.card_background);
+    private CardView crearCard(Bug bug, int marginTop) {
+        CardView cardView = new CardView(this);
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        cardParams.topMargin = marginTop;
+        cardView.setLayoutParams(cardParams);
+        cardView.setCardBackgroundColor(getColor(R.color.card_background));
+        cardView.setRadius(24f);
+        cardView.setCardElevation(8f);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.topMargin = marginTop;
-        card.setLayoutParams(lp);
-        card.setPadding(padding, padding, padding, padding);
+        LinearLayout mainLayout = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.HORIZONTAL);
+        mainLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
 
-
+        // Imagen vertical rectangular (si existe)
         if (bug.getImagenUrl() != null && !bug.getImagenUrl().trim().isEmpty()) {
             ImageView cover = new ImageView(this);
-            int heightPx = (int) (160 * getResources().getDisplayMetrics().density);
-            LinearLayout.LayoutParams imgLp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    heightPx
-            );
+            int widthPx = (int) (120 * getResources().getDisplayMetrics().density);
+            int heightPx = (int) (180 * getResources().getDisplayMetrics().density);
+            LinearLayout.LayoutParams imgLp = new LinearLayout.LayoutParams(widthPx, heightPx);
             cover.setLayoutParams(imgLp);
             cover.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             Glide.with(this)
                     .load(bug.getImagenUrl())
+                    .transform(new CenterCrop(), new RoundedCorners(24))
                     .placeholder(android.R.color.darker_gray)
                     .into(cover);
 
-            card.addView(cover);
+            mainLayout.addView(cover);
         }
 
-        TextView badge = crearBadgeGravedad(bug.getGravedad());
-        if (badge != null) card.addView(badge);
+        // Contenido (texto + badge + botones)
+        LinearLayout contentLayout = new LinearLayout(this);
+        contentLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams contentParams = new LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+        );
+        contentLayout.setLayoutParams(contentParams);
+        contentLayout.setPadding(20, 20, 20, 20);
 
+        // Badge de gravedad
+        TextView badge = crearBadgeGravedad(bug.getGravedad());
+        if (badge != null) contentLayout.addView(badge);
+
+        // Título
         TextView titulo = new TextView(this);
         titulo.setText(bug.getNombreJuego() + " • " + bug.getPlataforma() + " • " + bug.getTipo());
         titulo.setTextSize(14f);
@@ -208,39 +228,49 @@ public class ListaBugsActivity extends AppCompatActivity {
         titulo.setTypeface(null, android.graphics.Typeface.BOLD);
         titulo.setPadding(0, 12, 0, 0);
 
+        // Descripción
         TextView cuerpo = new TextView(this);
         cuerpo.setText(bug.getDescripcion());
         cuerpo.setTextColor(getColor(R.color.text_secondary));
         cuerpo.setTextSize(13f);
         cuerpo.setPadding(0, 8, 0, 0);
+        cuerpo.setMaxLines(3);
+        cuerpo.setEllipsize(android.text.TextUtils.TruncateAt.END);
 
-        card.addView(titulo);
-        card.addView(cuerpo);
+        contentLayout.addView(titulo);
+        contentLayout.addView(cuerpo);
 
+        // Botones admin
         if (UserRole.isAdmin()) {
-
             LinearLayout row = new LinearLayout(this);
             row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 12, 0, 0);
 
             Button btnEditar = new Button(this);
             btnEditar.setText("Editar");
             btnEditar.setAllCaps(false);
             btnEditar.setTextSize(12f);
+            btnEditar.setTextColor(getColor(R.color.purple_accent));
+            btnEditar.setBackground(null);
             btnEditar.setOnClickListener(v -> editarBug(bug));
 
             Button btnBorrar = new Button(this);
             btnBorrar.setText("Borrar");
             btnBorrar.setAllCaps(false);
             btnBorrar.setTextSize(12f);
+            btnBorrar.setTextColor(Color.parseColor("#EF4444"));
+            btnBorrar.setBackground(null);
             btnBorrar.setOnClickListener(v -> borrarBug(bug));
 
             row.addView(btnEditar);
             row.addView(btnBorrar);
-
-            card.addView(row);
+            contentLayout.addView(row);
         }
 
-        return card;
+        mainLayout.addView(contentLayout);
+        cardView.addView(mainLayout);
+
+        return cardView;
     }
 
     private void borrarBug(Bug bug) {
@@ -362,8 +392,8 @@ public class ListaBugsActivity extends AppCompatActivity {
         if (texto == null || color == null) return null;
 
         TextView badge = new TextView(this);
-        badge.setPadding(20, 8, 20, 8);
-        badge.setTextSize(12);
+        badge.setPadding(16, 6, 16, 6);
+        badge.setTextSize(10);
         badge.setTextColor(Color.WHITE);
         badge.setTypeface(null, android.graphics.Typeface.BOLD);
 
@@ -374,7 +404,7 @@ public class ListaBugsActivity extends AppCompatActivity {
         badge.setLayoutParams(params);
 
         GradientDrawable bg = new GradientDrawable();
-        bg.setCornerRadius(15);
+        bg.setCornerRadius(12);
         bg.setColor(color);
 
         badge.setText(texto);

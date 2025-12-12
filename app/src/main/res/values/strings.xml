@@ -1,58 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Name -->
     <string name="app_name">BugLog</string>
 
-    <!-- Formulario -->
-    <string name="titulo_reportar">Formulario de Reporte de Bugs</string>
-    <string name="hint_nombre_juego">¿En qué juego apareció?</string>
-    <string name="label_plataforma">Plataforma:</string>
-    <string name="label_tipo_bug">Tipo de Bug:</string>
-    <string name="label_gravedad">Gravedad:</string>
-    <string name="hint_descripcion">Contanos qué pasó</string>
-    <string name="btn_reportar">Enviar Reporte</string>
-    <string name="btn_ver_lista">Consultar Historial</string>
+    <!-- Login Screen -->
+    <string name="login_title">Ingresar a BugLog</string>
+    <string name="login_username_hint">admin o tester</string>
+    <string name="login_password_hint">1234</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_error_empty_username">El usuario no puede estar vacío</string>
+    <string name="login_error_empty_password">La contraseña no puede estar vacía</string>
+    <string name="login_error_invalid">Credenciales inválidas</string>
+    <string name="login_success">Bienvenido</string>
+    <string name="login_label_username">Usuario</string>
+    <string name="login_label_password">Contraseña</string>
 
+    <!-- Navbar -->
+    <string name="nav_report_bug">Reportar bug</string>
+    <string name="nav_history">Historial</string>
+    <string name="nav_logout">Cerrar sesión</string>
+    <string name="nav_login">Login</string>
 
-    <!-- Plataformas -->
-    <string-array name="plataformas">
-        <item>Seleccioná una plataforma</item>
-        <item>PC</item>
-        <item>PlayStation 5</item>
-        <item>PlayStation 4</item>
-        <item>Xbox Series S/X</item>
-        <item>Nintendo Switch</item>
-        <item>Nintendo Switch 2</item>
-        <item>Android</item>
-        <item>iOS</item>
-    </string-array>
+    <!-- Home/Main Screen -->
+    <string name="main_welcome">Bienvenido a BugLog</string>
+    <string name="main_description">Sistema de gestión de reportes de bugs en videojuegos</string>
 
-    <!-- Tipos de Bugs -->
-    <string name="tipo_grafico">Gráfico</string>
-    <string name="tipo_audio">Audio</string>
-    <string name="tipo_gameplay">Gameplay</string>
+    <!-- Form Screen -->
+    <string name="form_title">Reportá tu bug</string>
+    <string name="form_game_label">¿En qué juego apareció? </string>
+    <string name="form_game_hint">Escribí el nombre del juego</string>
+    <string name="form_platform_label">Plataforma</string>
+    <string name="form_platform_hint">Seleccioná una plataforma</string>
+    <string name="form_bug_type_label">Tipo de Bug</string>
+    <string name="form_bug_type_hint">Seleccioná un tipo de bug</string>
+    <string name="form_severity_label">Gravedad</string>
+    <string name="form_description_label">Contanos qué pasó</string>
+    <string name="form_description_hint">Describí el bug con el mayor detalle posible</string>
+    <string name="form_image_url_label">URL de imagen (opcional)</string>
+    <string name="form_image_url_hint">https://ejemplo.com/imagen.jpg</string>
+    <string name="form_button_submit">Reportar bug</string>
+    <string name="form_button_view_history">Ver historial</string>
+    <string name="form_error_empty_game">El nombre del juego es requerido</string>
+    <string name="form_error_empty_platform">Seleccioná una plataforma</string>
+    <string name="form_error_empty_bug_type">Seleccioná un tipo de bug</string>
+    <string name="form_error_empty_severity">Seleccioná una gravedad</string>
+    <string name="form_error_empty_description">La descripción es requerida</string>
+    <string name="form_success">Bug reportado exitosamente</string>
 
-    <string-array name="tipos_bug">
-        <item>Seleccioná un tipo de bug</item>
-        <item>Gráfico</item>
-        <item>Audio</item>
-        <item>Gameplay</item>
-    </string-array>
+    <!-- Bug List Screen -->
+    <string name="list_title">Historial de Bugs</string>
+    <string name="list_filter_all">TODOS</string>
+    <string name="list_filter_low">BAJA</string>
+    <string name="list_filter_medium">MEDIA</string>
+    <string name="list_filter_high">ALTA</string>
+    <string name="list_empty">No hay bugs reportados</string>
+    <string name="list_empty_filter">No hay bugs con esta gravedad</string>
 
-    <!-- Gravedad -->
+    <!-- Bug Card -->
+    <string name="card_reported_by">Reportado por: %s</string>
+    <string name="card_button_delete">Eliminar</string>
+    <string name="card_button_edit">Editar</string>
+    <string name="card_delete_confirm">¿Eliminar este bug?</string>
+    <string name="card_delete_success">Bug eliminado</string>
+    <string name="card_delete_cancel">Cancelar</string>
+    <string name="card_delete_ok">Eliminar</string>
+
+    <!-- Edit Modal -->
+    <string name="modal_edit_title">Editar Bug</string>
+    <string name="modal_edit_save">Guardar</string>
+    <string name="modal_edit_cancel">Cancelar</string>
+    <string name="modal_edit_success">Bug actualizado</string>
+
+    <!-- Severities -->
+    <string name="severity_low">Baja</string>
+    <string name="severity_medium">Media</string>
+    <string name="severity_high">Alta</string>
+    <string name="severity_badge_low">PRIORIDAD BAJA</string>
+    <string name="severity_badge_medium">PRIORIDAD MEDIA</string>
+    <string name="severity_badge_high">PRIORIDAD ALTA</string>
+
+    <!-- Platforms -->
+    <string name="platform_select">Seleccioná una plataforma</string>
+    <string name="platform_pc">PC</string>
+    <string name="platform_playstation">PlayStation</string>
+    <string name="platform_xbox">Xbox</string>
+    <string name="platform_nintendo">Nintendo Switch</string>
+    <string name="platform_mobile">Mobile</string>
+
+    <!-- Bug Types -->
+    <string name="bug_type_select">Seleccioná un tipo de bug</string>
+    <string name="bug_type_graphic">Gráfico</string>
+    <string name="bug_type_audio">Audio</string>
+    <string name="bug_type_gameplay">Gameplay</string>
+    <string name="bug_type_crash">Crash</string>
+    <string name="bug_type_performance">Performance</string>
+    <string name="bug_type_ui">Interfaz</string>
+    <string name="bug_type_network">Red/Online</string>
+    <string name="bug_type_other">Otro</string>
+
+    <!-- Common -->
+    <string name="common_loading">Cargando…</string>
+    <string name="common_error">Ha ocurrido un error</string>
+    <string name="common_success">Operación exitosa</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_accept">Aceptar</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_delete">Eliminar</string>
+    <string name="common_edit">Editar</string>
+
+    <!-- Severities (compatibilidad con tu Java) -->
     <string name="gravedad_baja">Baja</string>
     <string name="gravedad_media">Media</string>
     <string name="gravedad_alta">Alta</string>
 
-    <!-- Mensajes de error -->
-    <string name="error_nombre_vacio">Por favor, ingrese el nombre del juego</string>
-    <string name="error_plataforma">Debe seleccionar una plataforma.</string>
-    <string name="error_tipo_bug">Debe seleccionar un tipo de bug.</string>
-    <string name="error_gravedad">Indique la gravedad del bug</string>
-    <string name="error_descripcion">Ingrese una breve descripción del error</string>
-    <string name="bug_reportado">¡Bug registrado con éxito!</string>
+    <!-- Errores del formulario (compatibilidad con tu Java) -->
+    <string name="error_nombre_vacio">El nombre no puede estar vacío</string>
+    <string name="error_plataforma">Debe seleccionar una plataforma</string>
+    <string name="error_tipo_bug">Debe seleccionar un tipo de bug</string>
+    <string name="error_gravedad">Debe seleccionar una gravedad</string>
+    <string name="error_descripcion">La descripción no puede estar vacía</string>
 
-    <!-- Historial de bugs -->
-    <string name="titulo_lista">Bugs reportados</string>
-    <string name="no_bugs">Reportá el primero para empezar</string>
+    <!-- Mensaje de confirmación -->
+    <string name="bug_reportado">Bug reportado correctamente</string>
+
+    <!-- Lista vacía -->
+    <string name="no_bugs">No hay bugs reportados</string>
 
 </resources>

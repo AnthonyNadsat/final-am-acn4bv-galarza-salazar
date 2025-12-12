@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
     android:padding="24dp">
 
     <!-- Header -->
@@ -14,8 +13,10 @@
         android:layout_height="48dp"
         android:src="@mipmap/ic_launcher"
         android:contentDescription="Bug Icon"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
 
     <TextView
         android:id="@+id/tvTitulo"
@@ -26,10 +27,12 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginStart="12dp"
-        app:layout_constraintStart_toEndOf="@id/imgBugIcon"
-        app:layout_constraintTop_toTopOf="@id/imgBugIcon"
-        app:layout_constraintBottom_toBottomOf="@id/imgBugIcon"
+        android:layout_marginTop="24dp"
+        android:paddingTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <!-- Botón logout -->
     <Button
@@ -121,7 +124,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"/>
 
-            <!-- Gravedad -->
             <RadioGroup
                 android:id="@+id/rgGravedad"
                 android:layout_width="match_parent"
@@ -192,7 +194,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Botones en la parte inferior -->
+    <!-- Botones inferiores -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"

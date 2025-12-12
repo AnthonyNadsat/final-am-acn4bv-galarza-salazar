@@ -1,24 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colores Principales -->
+    <color name="primary_pink">#EC4899</color>
+    <color name="primary_purple">#8B5CF6</color>
+    <color name="accent_green">#22C55E</color>
 
-    <!-- Tema oscuro -->
-    <color name="background_color">#0F0F1E</color>
-    <color name="card_background">#1F1F2E</color>
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#6B7280</color>
-    <color name="border_color">#2A2A3E</color>
+    <!-- Backgrounds -->
+    <color name="bg_main">#030412</color>
+    <color name="bg_card">#0B1020</color>
+    <color name="bg_card_soft">#111827</color>
+    <color name="bg_input">#020617</color>
+    <color name="bg_navbar">#020617</color>
+    <color name="icon_background_dark">#030412</color>
 
-    <!-- Modal -->
-    <color name="bg_primary">#0F0F1E</color>
-    <color name="bg_secondary">#1F1F2E</color>
 
-    <!-- Colores morados/violetas -->
-    <color name="purple_primary">#8B5CF6</color>
-    <color name="purple_accent">#A78BFA</color>
+    <!-- Textos -->
+    <color name="text_main">#F9FAFB</color>
+    <color name="text_muted">#9CA3AF</color>
+    <color name="text_secondary">#D1D5DB</color>
+
+    <!-- Bordes -->
+    <color name="border_subtle">#1F2937</color>
+    <color name="border_card">#2D3748</color>
+
+    <!-- Severidades -->
+    <color name="severity_low">#22C55E</color>
+    <color name="severity_medium">#F59E0B</color>
+    <color name="severity_high">#EF4444</color>
 
     <!-- Botones -->
-    <color name="button_gradient_start">#EC4899</color>
-    <color name="button_gradient_end">#8B5CF6</color>
-    <color name="button_green">#10B981</color>
+    <color name="btn_primary_start">#AE65CF</color>
+    <color name="btn_primary_end">#6B4FCF</color>
+    <color name="btn_secondary">#2D2F39</color>
+    <color name="btn_secondary_border">#3F4150</color>
+    <color name="btn_delete">#EF4444</color>
+    <color name="btn_delete_hover">#DC2626</color>
+
+    <!-- Overlays / sombras -->
+    <color name="overlay_dark">#CC0F172A</color>
+    <color name="shadow_light">#1A000000</color>
+    <color name="shadow_medium">#4D000000</color>
+    <color name="shadow_heavy">#99000000</color>
+
+    <!-- Estados -->
+    <color name="state_active">#EC4899</color>
+    <color name="state_inactive">#4B5563</color>
+
+
+    <color name="border_card_alpha">#2E94A3B8</color>
+
+    <color name="colorPrimary">@color/primary_pink</color>
+    <color name="colorPrimaryDark">@color/bg_main</color>
+    <color name="colorAccent">@color/primary_purple</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <color name="background_color">@color/bg_main</color>
+    <color name="card_background">@color/bg_card_soft</color>
+    <color name="text_primary">@color/text_main</color>
+    <color name="purple_accent">@color/primary_purple</color>
 
 </resources>
